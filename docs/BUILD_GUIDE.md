@@ -55,7 +55,7 @@ Building UI first means:
 - No credentials needed = no accidental cost or security exposure
 
 ### Steps
-1. ⬜ Create mock data JSON files for 2-3 cities (Tokyo, Berlin, NYC)
+1. ⬜ Create mock data JSON files for 3-4 cities (Tokyo, Berlin, Lisbon, NYC)
 2. ⬜ Implement `MockCityDataService` matching `CityDataService` interface
 3. ⬜ Build shared UI primitives (buttons, cards, layout, loading states)
 4. ⬜ Build home screen (city search, trending cities, vibe cards)

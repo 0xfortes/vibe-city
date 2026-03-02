@@ -1,8 +1,8 @@
 # CLAUDE.md — Claude Code Project Instructions
 
-## Current Phase: 0 — Foundation
+## Current Phase: 1 — Local UI
 
-### Phase 0 Rules (UPDATE THIS SECTION AS YOU PROGRESS)
+### Phase 1 Rules 
 
 **DO NOT:**
 - Make any external API calls (Claude, Stripe, Supabase)
