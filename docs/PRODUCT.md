@@ -53,17 +53,20 @@ Push notifications when a city's vibe spikes: "Tokyo's nightlife score just hit 
 
 ## Key Screens (MVP)
 
+> **Implementation details, visual design decisions, and UX rationale are documented in `UI_DIRECTION.md`.** The section below describes the conceptual layout; `UI_DIRECTION.md` captures what was actually built and why.
+
 ### Home Screen
 - Search bar with "Drop a city..."
 - Trending cities with live Vibe Scores
 - Scrollable Vibe Cards for top cities
 
 ### City View
-- City name + generated tagline (e.g., "Chaos with impeccable taste")
+- Mood gate: user picks a mood before the debate begins
+- City name + generated tagline
 - Vibe Score card with animated sub-score bars
-- Share Vibe Card button
-- The Council debate (live-appearing messages)
+- The Council debate (live-appearing messages, verdict-first layout)
 - "Your Turn" follow-up prompts
+- Share Vibe Card button (planned)
 
 ### Future Screens (Post-MVP)
 - **Spots Map**: All mentioned places pinned on a map, filterable by agent

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import type { VibeScore } from '@/types';
 import { AGENTS } from '@/config/agents';
+import { AGENT_COLORS } from '@/config/agent-colors';
 import { Card, ScoreBar } from '@/components/ui';
 
 interface VibeScoreCardProps {
@@ -24,9 +25,9 @@ export function VibeScoreCard({ vibeScore, cityName }: VibeScoreCardProps) {
       <div className="flex flex-col gap-4">
         <motion.div
           className="text-center"
-          initial={{ opacity: 0, scale: 0.5 }}
+          initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
         >
           <span className="text-5xl font-bold text-white">{vibeScore.overall}</span>
           <p className="mt-1 text-sm text-zinc-400">Overall Vibe</p>
@@ -35,6 +36,7 @@ export function VibeScoreCard({ vibeScore, cityName }: VibeScoreCardProps) {
         <div className="flex flex-col gap-3">
           {SCORE_FIELDS.map(({ key, agentIndex }, i) => {
             const agent = AGENTS[agentIndex];
+            const colors = AGENT_COLORS[agent.id];
             return (
               <motion.div
                 key={key}
@@ -45,6 +47,7 @@ export function VibeScoreCard({ vibeScore, cityName }: VibeScoreCardProps) {
                 <ScoreBar
                   label={`${agent.emoji} ${agent.domain.charAt(0).toUpperCase() + agent.domain.slice(1)}`}
                   value={vibeScore[key] as number}
+                  color={colors.accent}
                 />
               </motion.div>
             );

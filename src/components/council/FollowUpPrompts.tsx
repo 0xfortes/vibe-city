@@ -21,7 +21,7 @@ export function FollowUpPrompts({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.2 }}
     >
-      <h3 className="text-sm font-semibold text-zinc-400">Your Turn</h3>
+      <h3 className="text-sm font-semibold text-zinc-400">Ask a follow-up</h3>
       <div className={`flex flex-wrap gap-2 ${disabled ? 'pointer-events-none opacity-50' : ''}`}>
         {prompts.map((prompt) => (
           <Chip

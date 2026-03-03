@@ -3,6 +3,13 @@
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
+
+  /* Agent accent colors */
+  --agent-nightowl: #a855f7;
+  --agent-foodie: #f97316;
+  --agent-culture: #3b82f6;
+  --agent-local: #f59e0b;
+  --agent-wanderer: #10b981;
 }
 
 @theme inline {
@@ -15,5 +22,19 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Dark scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
 }

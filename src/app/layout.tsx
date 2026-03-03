@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { NavHeader } from "@/components/ui/NavHeader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "VibeCITY",
-  description: "A living city personality engine where 5 AI agents debate what you should do tonight.",
+  description: "A living city personality engine where 5 AI agents debate what you should do.",
 };
 
 export default function RootLayout({
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <NavHeader />
         {children}
       </body>
     </html>

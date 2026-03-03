@@ -8,3 +8,4 @@ export { ScoreBar } from './ScoreBar';
 export { Container } from './Container';
 export { ErrorDisplay } from './ErrorDisplay';
 export { LoadingSpinner } from './LoadingSpinner';
+export { NavHeader } from './NavHeader';

@@ -2,6 +2,7 @@
 
 import type { AgentId } from '@/types';
 import { AGENT_MAP } from '@/config/agents';
+import { AGENT_COLORS } from '@/config/agent-colors';
 
 interface AgentAvatarProps {
   agentId: AgentId;
@@ -10,10 +11,10 @@ interface AgentAvatarProps {
   className?: string;
 }
 
-const SIZE_CLASSES = {
-  sm: 'text-lg',
-  md: 'text-2xl',
-  lg: 'text-4xl',
+const CIRCLE_SIZE_CLASSES = {
+  sm: 'h-7 w-7 text-sm',
+  md: 'h-9 w-9 text-lg',
+  lg: 'h-12 w-12 text-2xl',
 };
 
 const NAME_SIZE_CLASSES = {
@@ -29,15 +30,20 @@ export function AgentAvatar({
   className = '',
 }: AgentAvatarProps) {
   const agent = AGENT_MAP[agentId];
+  const colors = AGENT_COLORS[agentId];
   if (!agent) return null;
 
   return (
     <div className={`inline-flex items-center gap-2 ${className}`}>
-      <span className={SIZE_CLASSES[size]} role="img" aria-label={agent.name}>
+      <span
+        className={`inline-flex items-center justify-center rounded-full ${colors.bg} ${CIRCLE_SIZE_CLASSES[size]}`}
+        role="img"
+        aria-label={agent.name}
+      >
         {agent.emoji}
       </span>
       {showName && (
-        <span className={`font-medium text-zinc-200 ${NAME_SIZE_CLASSES[size]}`}>
+        <span className={`font-medium ${colors.text} ${NAME_SIZE_CLASSES[size]}`}>
           {agent.name}
         </span>
       )}

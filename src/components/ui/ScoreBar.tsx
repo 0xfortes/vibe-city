@@ -6,6 +6,7 @@ interface ScoreBarProps {
   label: string;
   value: number;
   maxValue?: number;
+  color?: string;
   className?: string;
 }
 
@@ -13,6 +14,7 @@ export function ScoreBar({
   label,
   value,
   maxValue = 100,
+  color,
   className = '',
 }: ScoreBarProps) {
   const percentage = Math.min(100, Math.max(0, (value / maxValue) * 100));
@@ -25,7 +27,8 @@ export function ScoreBar({
       </div>
       <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-800">
         <motion.div
-          className="h-full rounded-full bg-white"
+          className="h-full rounded-full"
+          style={{ backgroundColor: color ?? '#ffffff' }}
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
           transition={{ duration: 0.8, ease: 'easeOut' }}

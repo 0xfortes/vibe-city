@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import Link from 'next/link';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useCitySearch } from '@/hooks';
 
 export function CitySearch() {
@@ -25,24 +26,32 @@ export function CitySearch() {
         className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 outline-none transition-colors focus:border-zinc-500"
       />
 
-      {showDropdown && (
-        <div className="absolute top-full z-10 mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-900 py-1 shadow-lg">
-          {hasResults ? (
-            results.map((city) => (
-              <Link
-                key={city.id}
-                href={`/city/${city.id}`}
-                className="flex items-center justify-between px-4 py-2.5 text-sm text-zinc-200 transition-colors hover:bg-zinc-800"
-              >
-                <span className="font-medium">{city.name}</span>
-                <span className="text-xs text-zinc-500">{city.country}</span>
-              </Link>
-            ))
-          ) : (
-            <p className="px-4 py-3 text-sm text-zinc-500">No cities found</p>
-          )}
-        </div>
-      )}
+      <AnimatePresence>
+        {showDropdown && (
+          <motion.div
+            className="absolute top-full z-10 mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-900 py-1 shadow-lg"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.15 }}
+          >
+            {hasResults ? (
+              results.map((city) => (
+                <Link
+                  key={city.id}
+                  href={`/city/${city.id}`}
+                  className="flex items-center justify-between px-4 py-2.5 text-sm text-zinc-200 transition-colors hover:bg-zinc-800"
+                >
+                  <span className="font-medium">{city.name}</span>
+                  <span className="text-xs text-zinc-500">{city.country}</span>
+                </Link>
+              ))
+            ) : (
+              <p className="px-4 py-3 text-sm text-zinc-500">No cities found</p>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
