@@ -167,6 +167,7 @@ Build the full Council debate system, subscription enforcement, and debate savin
 10. ⬜ Build debate history view
 11. ⬜ Add rate limiting to all API endpoints
 12. ⬜ Implement input sanitization for follow-up questions (prompt injection prevention)
+13. ⬜ No exposed API keys. Never expose plaintext APIs. Always validate server side and never client side.
 
 ### Exit Criteria
 - [ ] Full 5-agent debate runs with streaming
@@ -175,6 +176,7 @@ Build the full Council debate system, subscription enforcement, and debate savin
 - [ ] Subscription gate blocks free users after trial
 - [ ] Debates save and load from history
 - [ ] Rate limiting prevents abuse
+- [ ] Check for API leaks. Validation server side and never client side
 
 ---
 

@@ -1,19 +1,11 @@
 # CLAUDE.md — Claude Code Project Instructions
 
-## Current Phase: 1 — Local UI
+## Current Phase: Phase 4: Testing & Hardening (tests, security audit, error handling)
 
-### Phase 1 Rules 
+### Phase Rules 
 
-**DO NOT:**
-- Make any external API calls (Claude, Stripe, Supabase)
-- Require any environment variables beyond `NEXT_PUBLIC_APP_URL`
-- Set up real database connections
-- Integrate Stripe or Anthropic
-- Run `npm run build` for production deployment
-- Install packages for services not yet needed
 
 **DO:**
-- Use mock data for all external dependencies
 - Use `npm run dev` for local development
 - Ask before running any command that installs new dependencies
 - Explain what each step does before executing it

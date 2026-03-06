@@ -98,7 +98,7 @@ const event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHO
 - Subscription status checked server-side on every protected request
 - Never trust client-side subscription state for access control
 - Handle ALL subscription states: `active`, `past_due`, `canceled`, `trialing`, `incomplete`, `incomplete_expired`, `unpaid`
-- Grace period: `past_due` subscriptions get 3 days of continued access with a banner prompting payment update
+- `past_due` subscriptions are blocked immediately — no grace period
 
 ### Checkout Security
 - Stripe Checkout Sessions created server-side only

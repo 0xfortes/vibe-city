@@ -162,7 +162,7 @@ CREATE INDEX idx_free_trials_ip ON free_trials(ip_hash);
 |--------|------------|----------------------|-------------------|-------------|
 | `active` | ✅ | ✅ | ✅ | Full access |
 | `trialing` | ✅ | ✅ | ✅ | Trial badge |
-| `past_due` | ✅ (3 day grace) | ✅ | ✅ | Payment warning banner |
+| `past_due` | ❌ | ✅ | ❌ | Resubscribe / update payment prompt |
 | `canceled` | ❌ | ✅ | ✅ (read-only) | Resubscribe prompt |
 | `incomplete` | ❌ | ✅ | ❌ | Complete payment prompt |
 | `unpaid` | ❌ | ✅ | ❌ | Payment required |

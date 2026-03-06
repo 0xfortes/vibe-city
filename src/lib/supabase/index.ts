@@ -1,1 +1,5 @@
-// Supabase client, queries, and RLS helpers — Phase 2+
+// Supabase client utilities
+// Use createClient() in client components, createServerSupabaseClient() in server components/API routes
+
+export { createClient } from './client';
+export { createServerSupabaseClient, createAdminClient } from './server';

@@ -151,8 +151,7 @@ describe('subscription gate', () => {
       if (['active', 'trialing'].includes(status!)) {
         expect(response.status).toBe(200);
       } else if (status === 'past_due') {
-        // 3-day grace period logic
-        expect(response.status).toBe(200); // or 403 depending on elapsed time
+        expect(response.status).toBe(403); // No grace period — blocked immediately
       } else {
         expect(response.status).toBe(403);
       }

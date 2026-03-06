@@ -1,1 +1,1 @@
-// Subscription gates and modals — Phase 2+
+export { UpgradeButton } from './UpgradeButton';

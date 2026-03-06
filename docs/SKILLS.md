@@ -527,8 +527,8 @@ export function useSubscription() {
 
       const subStatus = (sub?.status as SubscriptionStatus) ?? 'none';
       setStatus(subStatus);
-      // Allow access for active and trialing (and brief past_due grace)
-      setIsAllowed(['active', 'trialing', 'past_due'].includes(subStatus));
+      // Allow access for active and trialing only
+      setIsAllowed(['active', 'trialing'].includes(subStatus));
     }
 
     checkSubscription();
