@@ -47,6 +47,7 @@ export interface VerdictCard {
   topPick: string;
   wildcard: string;
   theDebate: string;
+  hiddenGem?: string;
 }
 
 // --- Vibe Score ---
@@ -141,6 +142,7 @@ export interface CityInfo {
   latitude: number;
   longitude: number;
   timezone: string;
+  gradient?: string;
 }
 
 // --- Subscription ---

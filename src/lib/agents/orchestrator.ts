@@ -73,7 +73,7 @@ async function runAgentTurn(
 
   const stream = await client.messages.stream({
     model: MODEL,
-    max_tokens: 300,
+    max_tokens: 200,
     system: systemPrompt,
     messages: [{ role: 'user', content: userMessage }],
   });
@@ -114,11 +114,18 @@ async function generateVerdict(
 
   const response = await client.messages.create({
     model: VERDICT_MODEL,
-    max_tokens: 300,
-    system: `You are the Verdict Generator for VibeCITY. You synthesize a debate between 5 city guides into a clear verdict.
+    max_tokens: 400,
+    system: `You are the Verdict Generator for VibeCITY. You synthesize a debate between 5 city guides into a clear, actionable verdict.
+
+RULES:
+- NEVER quote or name the agents (no "The Nightowl said...", no "According to The Foodie...")
+- NEVER include dialogue snippets or asterisked actions
+- Write as a confident city guide giving direct recommendations
+- Use specific venue/place names, times, and practical details
+- Keep each field concise — 1-2 sentences max
 
 Output EXACTLY this JSON format, no markdown, no code fences:
-{"topPick":"<A 1-sentence itinerary combining the best picks>","wildcard":"<A 1-sentence alternative/unexpected option>","theDebate":"<2-3 sentences summarizing where the agents agreed and disagreed>"}`,
+{"topPick":"<Direct 1-2 sentence plan: what to do, where, when>","wildcard":"<A surprising alternative nobody expected — specific place + why>","theDebate":"<1-2 sentences on what the key tradeoffs were, without naming agents>","hiddenGem":"<Optional: a lesser-known spot that came up, or null>"}`,
     messages: [
       {
         role: 'user',

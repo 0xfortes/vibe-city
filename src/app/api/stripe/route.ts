@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { createCheckoutSession } from '@/lib/stripe';
+import { getStripeServer } from '@/lib/stripe/client';
 import { AppError, handleApiError } from '@/lib/errors';
 import { checkRateLimit, RATE_LIMITS } from '@/lib/security';
 
@@ -46,12 +47,34 @@ export async function POST(request: Request) {
       .eq('id', user.id)
       .single();
 
+    let stripeCustomerId = (profile as { stripe_customer_id: string | null } | null)?.stripe_customer_id ?? null;
+
+    // Validate stored Stripe customer still exists (handles re-subscription after cancellation)
+    if (stripeCustomerId) {
+      try {
+        const customer = await getStripeServer().customers.retrieve(stripeCustomerId);
+        if (customer.deleted) {
+          stripeCustomerId = null;
+        }
+      } catch {
+        // Customer doesn't exist in Stripe — clear it so checkout creates a new one
+        stripeCustomerId = null;
+      }
+
+      if (!stripeCustomerId) {
+        await supabase
+          .from('profiles')
+          .update({ stripe_customer_id: null })
+          .eq('id', user.id);
+      }
+    }
+
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
 
     const checkoutUrl = await createCheckoutSession({
       userId: user.id,
       email: user.email!,
-      stripeCustomerId: (profile as { stripe_customer_id: string | null } | null)?.stripe_customer_id,
+      stripeCustomerId,
       priceId: parsed.data.priceId,
       successUrl: `${appUrl}/dashboard?checkout=success`,
       cancelUrl: `${appUrl}/dashboard?checkout=canceled`,

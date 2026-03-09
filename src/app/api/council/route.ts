@@ -52,8 +52,21 @@ export async function POST(request: Request) {
     const { cityId, mood, followUp, previousMessages } = parsed.data;
     const isFollowUp = !!followUp && !!previousMessages;
 
-    // --- Rate limiting ---
-    const rateLimitKey = isFollowUp ? 'followUp' : 'debate';
+    // --- Fetch profile first so we know subscription status for rate limiting ---
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('subscription_status, free_debates_used')
+      .eq('id', user.id)
+      .single<{ subscription_status: string | null; free_debates_used: number }>();
+
+    const subscriptionStatus = profile?.subscription_status;
+    const freeDebatesUsed = profile?.free_debates_used ?? 0;
+    const isSubscribed = subscriptionStatus === 'active' || subscriptionStatus === 'trialing';
+
+    // --- Subscription-aware rate limiting ---
+    const rateLimitKey = isFollowUp
+      ? (isSubscribed ? 'followUpPro' : 'followUp')
+      : (isSubscribed ? 'debatePro' : 'debate');
     const rateLimit = checkRateLimit(rateLimitKey, user.id, RATE_LIMITS[rateLimitKey]);
     if (!rateLimit.allowed) {
       return new Response(
@@ -72,17 +85,6 @@ export async function POST(request: Request) {
         },
       );
     }
-
-    // --- Fetch profile + subscription gate ---
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('subscription_status, free_debates_used')
-      .eq('id', user.id)
-      .single<{ subscription_status: string | null; free_debates_used: number }>();
-
-    const subscriptionStatus = profile?.subscription_status;
-    const freeDebatesUsed = profile?.free_debates_used ?? 0;
-    const isSubscribed = subscriptionStatus === 'active' || subscriptionStatus === 'trialing';
 
     // Skip subscription gate for follow-ups — they're part of the original debate
     if (!isFollowUp && !isSubscribed && freeDebatesUsed >= 1) {
@@ -167,9 +169,14 @@ export async function POST(request: Request) {
             }
           }
         } catch (err) {
+          // Never leak raw error messages to client — use AppError.userMessage or generic fallback
+          const userMessage = err instanceof AppError
+            ? err.userMessage
+            : 'The Council is taking a break. Try again in a moment.';
+          console.error('Debate stream error:', err);
           const errorEvent = `data: ${JSON.stringify({
             type: 'error',
-            error: err instanceof Error ? err.message : 'Debate failed',
+            error: userMessage,
           })}\n\n`;
           controller.enqueue(encoder.encode(errorEvent));
         } finally {

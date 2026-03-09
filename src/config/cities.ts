@@ -9,6 +9,7 @@ export const LAUNCH_CITIES: CityInfo[] = [
     latitude: 35.6762,
     longitude: 139.6503,
     timezone: 'Asia/Tokyo',
+    gradient: 'from-rose-500/20 via-pink-500/10 to-fuchsia-500/20',
   },
   {
     id: 'berlin',
@@ -18,6 +19,7 @@ export const LAUNCH_CITIES: CityInfo[] = [
     latitude: 52.52,
     longitude: 13.405,
     timezone: 'Europe/Berlin',
+    gradient: 'from-zinc-500/20 via-neutral-500/10 to-stone-500/20',
   },
   {
     id: 'mexico-city',
@@ -27,6 +29,7 @@ export const LAUNCH_CITIES: CityInfo[] = [
     latitude: 19.4326,
     longitude: -99.1332,
     timezone: 'America/Mexico_City',
+    gradient: 'from-orange-500/20 via-amber-500/10 to-yellow-500/20',
   },
   {
     id: 'lisbon',
@@ -36,6 +39,7 @@ export const LAUNCH_CITIES: CityInfo[] = [
     latitude: 38.7223,
     longitude: -9.1393,
     timezone: 'Europe/Lisbon',
+    gradient: 'from-sky-500/20 via-cyan-500/10 to-teal-500/20',
   },
   {
     id: 'nyc',
@@ -45,6 +49,7 @@ export const LAUNCH_CITIES: CityInfo[] = [
     latitude: 40.7128,
     longitude: -74.006,
     timezone: 'America/New_York',
+    gradient: 'from-amber-500/20 via-yellow-500/10 to-orange-500/20',
   },
   {
     id: 'paris',
@@ -54,6 +59,7 @@ export const LAUNCH_CITIES: CityInfo[] = [
     latitude: 48.8566,
     longitude: 2.3522,
     timezone: 'Europe/Paris',
+    gradient: 'from-violet-500/20 via-purple-500/10 to-indigo-500/20',
   },
   {
     id: 'london',
@@ -63,6 +69,7 @@ export const LAUNCH_CITIES: CityInfo[] = [
     latitude: 51.5074,
     longitude: -0.1278,
     timezone: 'Europe/London',
+    gradient: 'from-blue-500/20 via-slate-500/10 to-indigo-500/20',
   },
   {
     id: 'bangkok',
@@ -72,6 +79,7 @@ export const LAUNCH_CITIES: CityInfo[] = [
     latitude: 13.7563,
     longitude: 100.5018,
     timezone: 'Asia/Bangkok',
+    gradient: 'from-emerald-500/20 via-green-500/10 to-lime-500/20',
   },
   {
     id: 'buenos-aires',
@@ -81,6 +89,7 @@ export const LAUNCH_CITIES: CityInfo[] = [
     latitude: -34.6037,
     longitude: -58.3816,
     timezone: 'America/Argentina/Buenos_Aires',
+    gradient: 'from-cyan-500/20 via-blue-500/10 to-indigo-500/20',
   },
   {
     id: 'istanbul',
@@ -90,6 +99,7 @@ export const LAUNCH_CITIES: CityInfo[] = [
     latitude: 41.0082,
     longitude: 28.9784,
     timezone: 'Europe/Istanbul',
+    gradient: 'from-red-500/20 via-rose-500/10 to-amber-500/20',
   },
 ];
 

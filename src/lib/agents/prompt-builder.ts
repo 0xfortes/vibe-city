@@ -64,6 +64,16 @@ export function buildSystemPrompt(ctx: PromptContext): string {
     }
   }
 
+  // Time-of-day context for relevance
+  const hour = new Date().toLocaleString('en-US', { timeZone: ctx.city.timezone, hour: 'numeric', hour12: false });
+  const hourNum = parseInt(hour, 10);
+  let timeContext = 'evening';
+  if (hourNum >= 5 && hourNum < 12) timeContext = 'morning';
+  else if (hourNum >= 12 && hourNum < 17) timeContext = 'afternoon';
+  else if (hourNum >= 17 && hourNum < 21) timeContext = 'evening';
+  else timeContext = 'late night';
+  parts.push(`\nTIME: It's currently ${timeContext} in ${ctx.city.name}.`);
+
   // Previous debate messages — agents should reference and react to these
   if (ctx.previousMessages.length > 0) {
     const debateHistory = ctx.previousMessages
@@ -74,6 +84,9 @@ export function buildSystemPrompt(ctx: PromptContext): string {
   } else {
     parts.push('\nYou are speaking FIRST in this debate. Set the tone.');
   }
+
+  // Final grounding directive
+  parts.push('\nFINAL RULE: Be concise (2-4 sentences). State your opinion clearly. Include one practical detail per pick (time, price, what to order). Never hedge or be vague.');
 
   return parts.join('\n');
 }

@@ -12,6 +12,7 @@ const signupSchema = z.object({
 
 export interface AuthFormState {
   error: string | null;
+  success: string | null;
 }
 
 export async function signup(_prevState: AuthFormState, formData: FormData): Promise<AuthFormState> {
@@ -22,7 +23,7 @@ export async function signup(_prevState: AuthFormState, formData: FormData): Pro
   });
 
   if (!parsed.success) {
-    return { error: parsed.error.issues[0].message };
+    return { error: parsed.error.issues[0].message, success: null };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -38,18 +39,32 @@ export async function signup(_prevState: AuthFormState, formData: FormData): Pro
 
   if (error) {
     console.error('Signup error:', error.message, error.status);
-    if (error.message.includes('already registered')) {
-      return { error: 'An account with this email already exists.' };
+
+    // Parse Supabase error codes for specific messages
+    if (error.message.includes('already registered') || error.status === 422) {
+      return { error: 'An account with this email already exists.', success: null };
     }
-    return { error: 'Unable to create account. Please try again.' };
+    if (error.message.includes('password') && error.message.includes('least')) {
+      return { error: 'Password is too weak. Use at least 6 characters with a mix of letters and numbers.', success: null };
+    }
+    if (error.status === 429) {
+      return { error: 'Too many signup attempts. Please wait a few minutes and try again.', success: null };
+    }
+    if (error.message.includes('valid email') || error.message.includes('invalid')) {
+      return { error: 'Please enter a valid email address.', success: null };
+    }
+    return { error: 'Unable to create account. Please try again.', success: null };
   }
 
   // If email confirmation is required, identities will be empty
   if (data.user?.identities?.length === 0) {
-    return { error: 'An account with this email already exists.' };
+    return { error: 'An account with this email already exists.', success: null };
   }
   if (data.user && !data.user.confirmed_at) {
-    return { error: 'Check your email to confirm your account before signing in.' };
+    return {
+      error: null,
+      success: 'We sent a confirmation link to your email. Check your inbox (and spam folder) to activate your account.',
+    };
   }
 
   redirect('/dashboard');

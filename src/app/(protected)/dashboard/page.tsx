@@ -1,10 +1,9 @@
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { Container } from '@/components/ui';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { UpgradeButton } from '@/components/payment';
-import { CITY_MAP } from '@/config/cities';
+import { LAUNCH_CITIES, CITY_MAP } from '@/config/cities';
 import type { VerdictCard } from '@/types';
+import { DashboardClient } from './DashboardClient';
 
 interface ProfileRow {
   display_name: string | null;
@@ -18,6 +17,13 @@ interface DebateRow {
   mood: string | null;
   verdict: VerdictCard | null;
   created_at: string;
+}
+
+function getGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning';
+  if (hour < 18) return 'Good afternoon';
+  return 'Good evening';
 }
 
 export default async function DashboardPage() {
@@ -47,17 +53,29 @@ export default async function DashboardPage() {
     .returns<DebateRow[]>();
 
   const displayName = profile?.display_name ?? user.email?.split('@')[0] ?? 'Explorer';
-  const debateCount = debates?.length ?? 0;
   const freeDebatesUsed = profile?.free_debates_used ?? 0;
   const subscriptionStatus = profile?.subscription_status;
   const isSubscribed = subscriptionStatus === 'active' || subscriptionStatus === 'trialing';
+
+  // Map debates to include city names for the client component
+  const debatesWithCityNames = (debates ?? []).map((debate) => ({
+    ...debate,
+    cityName: CITY_MAP[debate.city_id]?.name ?? debate.city_id,
+    // Narrow verdict to the shape the client component expects
+    verdict: debate.verdict ? { topPick: debate.verdict.topPick } : null,
+  }));
+
+  // City list for QuickStart
+  const cities = LAUNCH_CITIES.map((c) => ({ id: c.id, name: c.name, country: c.country }));
 
   return (
     <Container className="py-8">
       <div className="flex flex-col gap-8">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-white">Hey, {displayName}</h1>
+          <h1 className="text-3xl font-bold text-white">
+            {getGreeting()}, {displayName}
+          </h1>
           <p className="mt-1 text-zinc-400">
             {isSubscribed
               ? 'VibeCITY Pro — unlimited debates'
@@ -67,82 +85,14 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-5">
-            <p className="text-sm text-zinc-400">Debates</p>
-            <p className="mt-1 text-2xl font-bold text-white">{debateCount}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-5">
-            <p className="text-sm text-zinc-400">Plan</p>
-            <p className="mt-1 text-2xl font-bold text-white">
-              {isSubscribed ? 'Pro' : 'Free'}
-            </p>
-          </div>
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-5">
-            <p className="text-sm text-zinc-400">Free debates used</p>
-            <p className="mt-1 text-2xl font-bold text-white">{freeDebatesUsed} / 1</p>
-          </div>
-        </div>
-
-        {/* Recent debates */}
-        {debates && debates.length > 0 && (
-          <div>
-            <h2 className="mb-4 text-lg font-semibold text-zinc-200">Recent debates</h2>
-            <div className="flex flex-col gap-3">
-              {debates.map((debate) => {
-                const city = CITY_MAP[debate.city_id];
-                const cityName = city?.name ?? debate.city_id;
-                const verdict = debate.verdict;
-
-                return (
-                  <Link
-                    key={debate.id}
-                    href={`/city/${debate.city_id}`}
-                    className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 transition-colors hover:border-zinc-700 hover:bg-zinc-900/80"
-                  >
-                    <div className="flex items-center justify-between">
-                      <p className="font-medium text-white">{cityName}</p>
-                      <div className="flex items-center gap-2">
-                        {debate.mood && (
-                          <span className="rounded-full border border-zinc-700 bg-zinc-800 px-2.5 py-0.5 text-xs text-zinc-400">
-                            {debate.mood}
-                          </span>
-                        )}
-                        <span className="text-xs text-zinc-500">
-                          {new Date(debate.created_at).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
-                    {verdict?.topPick && (
-                      <p className="mt-2 text-sm text-zinc-400 line-clamp-2">
-                        {verdict.topPick}
-                      </p>
-                    )}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Upgrade CTA for non-subscribers */}
-        {!isSubscribed && (
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 text-center">
-            <h2 className="text-lg font-semibold text-white">Unlock unlimited debates</h2>
-            <p className="mt-1 mb-4 text-sm text-zinc-400">
-              Get unlimited Council debates, saved history, and more.
-            </p>
-            <UpgradeButton priceId={process.env.STRIPE_PRICE_ID_MONTHLY ?? ''} />
-          </div>
-        )}
-
-        {/* Empty state */}
-        {(!debates || debates.length === 0) && (
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-8 text-center">
-            <p className="text-zinc-400">No debates yet. Pick a city and let The Council decide.</p>
-          </div>
-        )}
+        {/* Interactive dashboard content */}
+        <DashboardClient
+          cities={cities}
+          debates={debatesWithCityNames}
+          isSubscribed={isSubscribed}
+          freeDebatesUsed={freeDebatesUsed}
+          priceId={process.env.STRIPE_PRICE_ID_MONTHLY ?? ''}
+        />
       </div>
     </Container>
   );

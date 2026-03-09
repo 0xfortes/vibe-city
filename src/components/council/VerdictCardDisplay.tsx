@@ -43,6 +43,16 @@ export function VerdictCardDisplay({ verdict }: VerdictCardDisplayProps) {
               </div>
               <p className="text-sm leading-relaxed text-zinc-300">{verdict.theDebate}</p>
             </div>
+
+            {verdict.hiddenGem && (
+              <div>
+                <div className="mb-1.5 flex items-center gap-2">
+                  <span className="text-purple-400">&#128142;</span>
+                  <span className="text-base font-semibold text-purple-400">Hidden Gem</span>
+                </div>
+                <p className="text-sm leading-relaxed text-zinc-200">{verdict.hiddenGem}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

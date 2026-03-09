@@ -8,6 +8,14 @@ vi.mock('@/lib/stripe', () => ({
   createCheckoutSession: vi.fn().mockResolvedValue('https://checkout.stripe.com/session-123'),
 }));
 
+vi.mock('@/lib/stripe/client', () => ({
+  getStripeServer: vi.fn().mockReturnValue({
+    customers: {
+      retrieve: vi.fn().mockResolvedValue({ id: 'cus_existing', deleted: false }),
+    },
+  }),
+}));
+
 vi.mock('@/lib/security', () => ({
   checkRateLimit: vi.fn().mockReturnValue({ allowed: true, retryAfterSeconds: 0 }),
   RATE_LIMITS: {
@@ -32,6 +40,10 @@ function mockSupabase(overrides: { user?: unknown | null; profile?: unknown } = 
   const user = 'user' in overrides ? overrides.user : { id: 'user-1', email: 'test@test.com' };
   const profile = overrides.profile ?? { stripe_customer_id: null };
 
+  const updateMock = vi.fn().mockReturnValue({
+    eq: vi.fn().mockResolvedValue({ error: null }),
+  });
+
   const supabaseMock = {
     auth: {
       getUser: vi.fn().mockResolvedValue({ data: { user }, error: null }),
@@ -42,6 +54,7 @@ function mockSupabase(overrides: { user?: unknown | null; profile?: unknown } = 
           single: vi.fn().mockResolvedValue({ data: profile, error: null }),
         }),
       }),
+      update: updateMock,
     }),
   };
 

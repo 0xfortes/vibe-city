@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { CityInfo, VibeScore, MoodType } from '@/types';
 import { useDebate } from '@/hooks';
 import { ErrorDisplay } from '@/components/ui';
+import { GateModal } from '@/components/payment';
 import { VibeScoreCard } from '@/components/vibe';
 import {
   MoodSelector,
@@ -33,6 +34,7 @@ export function CityViewClient({ city, vibeScore }: CityViewClientProps) {
     isStreaming,
     isComplete,
     error,
+    errorCode,
     startDebate,
     reset,
   } = useDebate();
@@ -134,7 +136,13 @@ export function CityViewClient({ city, vibeScore }: CityViewClientProps) {
         )}
       </div>
 
-      {error && (
+      {error && errorCode === 'AUTH_REQUIRED' && (
+        <GateModal type="auth" onClose={reset} />
+      )}
+      {error && errorCode === 'TRIAL_EXHAUSTED' && (
+        <GateModal type="paywall" onClose={reset} />
+      )}
+      {error && errorCode !== 'AUTH_REQUIRED' && errorCode !== 'TRIAL_EXHAUSTED' && (
         <ErrorDisplay error={error} onRetry={() => startDebate(city.id, selectedMood ?? undefined)} />
       )}
 

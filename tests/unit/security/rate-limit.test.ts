@@ -86,4 +86,64 @@ describe('checkRateLimit', () => {
     const result = rl('test', 'user2', config);
     expect(result.allowed).toBe(true);
   });
+
+  it('11-request boundary test: allows exactly maxRequests then blocks', async () => {
+    const rl = await getFreshRateLimit();
+    const highConfig = { maxRequests: 10, windowMs: 60_000 };
+
+    // Requests 1-10 should all be allowed
+    for (let i = 0; i < 10; i++) {
+      const result = rl('boundary', 'user1', highConfig);
+      expect(result.allowed, `request ${i + 1} should be allowed`).toBe(true);
+    }
+
+    // Request 11 should be blocked
+    const blocked = rl('boundary', 'user1', highConfig);
+    expect(blocked.allowed).toBe(false);
+    expect(blocked.retryAfterSeconds).toBeGreaterThan(0);
+  });
+
+  it('retryAfterSeconds decreases as time passes', async () => {
+    const rl = await getFreshRateLimit();
+    const now = Date.now();
+    vi.spyOn(Date, 'now').mockReturnValue(now);
+
+    rl('test', 'user1', config);
+    rl('test', 'user1', config);
+    rl('test', 'user1', config);
+
+    const result1 = rl('test', 'user1', config);
+    expect(result1.allowed).toBe(false);
+
+    // Move 30 seconds forward — retryAfter should decrease
+    vi.spyOn(Date, 'now').mockReturnValue(now + 30_000);
+    const result2 = rl('test', 'user1', config);
+    expect(result2.allowed).toBe(false);
+    expect(result2.retryAfterSeconds).toBeLessThanOrEqual(31);
+    expect(result2.retryAfterSeconds).toBeGreaterThan(0);
+
+    vi.restoreAllMocks();
+  });
+});
+
+describe('RATE_LIMITS presets', () => {
+  it('has pro presets with higher limits than free', async () => {
+    const mod = await import('@/lib/security/rate-limit');
+    const limits = mod.RATE_LIMITS;
+
+    expect(limits.debatePro.maxRequests).toBeGreaterThan(limits.debate.maxRequests);
+    expect(limits.followUpPro.maxRequests).toBeGreaterThan(limits.followUp.maxRequests);
+  });
+
+  it('pro debate allows 100/hour', async () => {
+    const mod = await import('@/lib/security/rate-limit');
+    expect(mod.RATE_LIMITS.debatePro.maxRequests).toBe(100);
+    expect(mod.RATE_LIMITS.debatePro.windowMs).toBe(60 * 60 * 1000);
+  });
+
+  it('pro follow-up allows 200/hour', async () => {
+    const mod = await import('@/lib/security/rate-limit');
+    expect(mod.RATE_LIMITS.followUpPro.maxRequests).toBe(200);
+    expect(mod.RATE_LIMITS.followUpPro.windowMs).toBe(60 * 60 * 1000);
+  });
 });

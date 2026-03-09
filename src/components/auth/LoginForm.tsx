@@ -53,6 +53,12 @@ export function LoginForm() {
             className="rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2.5 text-white placeholder-zinc-500 outline-none transition-colors focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500"
             placeholder="••••••••"
           />
+          <Link
+            href="/forgot-password"
+            className="mt-1 self-end text-sm text-zinc-500 hover:text-zinc-300"
+          >
+            Forgot password?
+          </Link>
         </div>
 
         <Button type="submit" disabled={isPending} className="mt-2 w-full">

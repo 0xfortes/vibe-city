@@ -1,6 +1,6 @@
 # CLAUDE.md — Claude Code Project Instructions
 
-## Current Phase: Phase 4: Testing & Hardening (tests, security audit, error handling)
+## Current Phase: Pre-Phase 5 polish complete, ready for Phase 5: Staging (Vercel preview, staging credentials)
 
 ### Phase Rules 
 

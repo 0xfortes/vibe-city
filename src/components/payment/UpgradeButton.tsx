@@ -35,7 +35,7 @@ export function UpgradeButton({ priceId }: UpgradeButtonProps) {
 
   return (
     <Button onClick={handleUpgrade} loading={loading} disabled={loading}>
-      {loading ? 'Redirecting...' : 'Upgrade to Pro — $6.99/mo'}
+      {loading ? 'Redirecting...' : 'Upgrade to Pro — $9.99/mo'}
     </Button>
   );
 }

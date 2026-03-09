@@ -12,6 +12,7 @@ interface UseDebateReturn {
   isStreaming: boolean;
   isComplete: boolean;
   error: Error | null;
+  errorCode: string | null;
   startDebate: (cityId: string, mood?: MoodType) => void;
   askFollowUp: (cityId: string, question: string, mood?: MoodType) => void;
   reset: () => void;
@@ -29,6 +30,7 @@ export function useDebate(): UseDebateReturn {
   const [isStreaming, setIsStreaming] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   // Store messages from the last completed round for follow-up context
   const lastRoundMessages = useRef<AgentMessage[]>([]);
@@ -43,6 +45,7 @@ export function useDebate(): UseDebateReturn {
     setIsStreaming(false);
     setIsComplete(false);
     setError(null);
+    setErrorCode(null);
     lastRoundMessages.current = [];
   }, []);
 
@@ -60,6 +63,7 @@ export function useDebate(): UseDebateReturn {
       setIsStreaming(true);
       setIsComplete(false);
       setError(null);
+      setErrorCode(null);
 
       (async () => {
         try {
@@ -72,6 +76,8 @@ export function useDebate(): UseDebateReturn {
 
           if (!response.ok) {
             const errorData = await response.json();
+            const code = errorData.error?.code ?? null;
+            setErrorCode(code);
             throw new Error(errorData.error?.message ?? 'Debate failed');
           }
 
@@ -205,6 +211,7 @@ export function useDebate(): UseDebateReturn {
     isStreaming,
     isComplete,
     error,
+    errorCode,
     startDebate,
     askFollowUp,
     reset,

@@ -64,7 +64,9 @@ export function checkRateLimit(
 
 // Rate limit presets per SECURITY.md
 export const RATE_LIMITS = {
-  debate: { maxRequests: 10, windowMs: 60 * 60 * 1000 },       // 10/hour
-  followUp: { maxRequests: 30, windowMs: 60 * 60 * 1000 },     // 30/hour
-  checkout: { maxRequests: 10, windowMs: 60 * 60 * 1000 },     // 10/hour
+  debate: { maxRequests: 10, windowMs: 60 * 60 * 1000 },         // 10/hour (free)
+  followUp: { maxRequests: 30, windowMs: 60 * 60 * 1000 },       // 30/hour (free)
+  debatePro: { maxRequests: 100, windowMs: 60 * 60 * 1000 },     // 100/hour (pro)
+  followUpPro: { maxRequests: 200, windowMs: 60 * 60 * 1000 },   // 200/hour (pro)
+  checkout: { maxRequests: 10, windowMs: 60 * 60 * 1000 },       // 10/hour
 } as const;
