@@ -2,7 +2,7 @@
 
 import { type ButtonHTMLAttributes } from 'react';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'shimmer';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -13,11 +13,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary:
-    'bg-white text-zinc-900 hover:bg-zinc-200 active:bg-zinc-300',
+    'bg-gradient-to-r from-[#00FFaa] to-[#06b6d4] text-[#08080c] font-semibold hover:opacity-90 active:opacity-80',
   secondary:
-    'bg-zinc-800 text-zinc-100 hover:bg-zinc-700 active:bg-zinc-600 border border-zinc-700',
+    'bg-white/5 text-white/80 hover:bg-white/[0.08] active:bg-white/[0.12] border border-white/[0.08]',
   ghost:
-    'bg-transparent text-zinc-300 hover:bg-zinc-800 active:bg-zinc-700',
+    'bg-transparent text-white/60 hover:bg-white/5 hover:text-white/80 active:bg-white/[0.08]',
+  shimmer:
+    'shimmer-btn bg-gradient-to-r from-[#00FFaa] to-[#06b6d4] text-[#08080c] font-semibold hover:opacity-90 active:opacity-80',
 };
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
@@ -37,7 +39,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 disabled:opacity-50 disabled:cursor-not-allowed ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00FFaa]/40 disabled:opacity-50 disabled:cursor-not-allowed ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${className}`}
       disabled={disabled || loading}
       {...props}
     >

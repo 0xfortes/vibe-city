@@ -22,10 +22,10 @@ export function ScoreBar({
   return (
     <div className={`flex flex-col gap-1 ${className}`}>
       <div className="flex items-center justify-between text-sm">
-        <span className="text-zinc-400">{label}</span>
-        <span className="font-medium text-zinc-200">{value}</span>
+        <span className="text-white/35">{label}</span>
+        <span className="font-medium text-white/80">{value}</span>
       </div>
-      <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-800">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-white/[0.06]">
         <motion.div
           className="h-full rounded-full"
           style={{ backgroundColor: color ?? '#ffffff' }}

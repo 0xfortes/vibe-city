@@ -44,10 +44,10 @@ export interface AgentContext {
 // --- Verdict ---
 
 export interface VerdictCard {
-  topPick: string;
+  route: string;
+  description: string;
+  consensus: string;
   wildcard: string;
-  theDebate: string;
-  hiddenGem?: string;
 }
 
 // --- Vibe Score ---
@@ -139,6 +139,7 @@ export interface CityInfo {
   name: string;
   tagline: string;
   country: string;
+  flag: string;
   latitude: number;
   longitude: number;
   timezone: string;

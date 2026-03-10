@@ -19,7 +19,7 @@ export function GateModal({ type, onClose }: GateModalProps) {
       onClick={onClose}
     >
       <motion.div
-        className="relative mx-4 w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 p-8"
+        className="relative mx-4 w-full max-w-md rounded-2xl border border-white/[0.06] bg-[--card-bg] p-8"
         initial={{ opacity: 0, scale: 0.92 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.92 }}
@@ -30,7 +30,7 @@ export function GateModal({ type, onClose }: GateModalProps) {
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 text-zinc-500 transition-colors hover:text-zinc-300"
+          className="absolute right-4 top-4 text-white/30 transition-colors hover:text-white/60"
           aria-label="Close"
         >
           <svg
@@ -57,13 +57,13 @@ export function GateModal({ type, onClose }: GateModalProps) {
             <div className="flex w-full flex-col gap-3">
               <Link
                 href="/login"
-                className="rounded-lg border border-zinc-700 bg-zinc-800 px-6 py-3 text-center text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
+                className="rounded-lg border border-white/[0.08] bg-white/5 px-6 py-3 text-center text-sm font-medium text-white/70 transition-all hover:bg-white/[0.08] hover:text-white"
               >
                 Sign in
               </Link>
               <Link
                 href="/signup"
-                className="rounded-lg bg-white px-6 py-3 text-center text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
+                className="rounded-lg bg-gradient-to-r from-[#00FFaa] to-[#06b6d4] px-6 py-3 text-center text-sm font-semibold text-[#08080c] transition-opacity hover:opacity-90"
               >
                 Create account
               </Link>
@@ -74,13 +74,13 @@ export function GateModal({ type, onClose }: GateModalProps) {
             <h2 className="text-xl font-bold text-white">
               You&apos;ve used your free debate
             </h2>
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-white/40">
               Upgrade to VibeCITY Pro for unlimited Council debates, saved history, and more.
             </p>
             <div className="flex w-full flex-col gap-3">
               <Link
                 href="/dashboard"
-                className="rounded-lg bg-white px-6 py-3 text-center text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
+                className="shimmer-btn rounded-lg bg-gradient-to-r from-[#00FFaa] to-[#06b6d4] px-6 py-3 text-center text-sm font-semibold text-[#08080c] transition-opacity hover:opacity-90"
               >
                 Upgrade to Pro
               </Link>

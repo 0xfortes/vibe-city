@@ -25,15 +25,15 @@ export function MoodSelector({
             key={mood.id}
             type="button"
             onClick={() => onMoodSelect(mood.id)}
-            className={`flex flex-col items-center gap-1.5 rounded-xl border px-5 py-4 text-center transition-all hover:border-zinc-500 hover:bg-zinc-800 ${
+            className={`flex flex-col items-center gap-1.5 rounded-xl border px-5 py-4 text-center transition-all hover:border-white/[0.15] hover:bg-white/[0.06] ${
               selectedMood === mood.id
-                ? 'border-white bg-white/5'
-                : 'border-zinc-700 bg-zinc-900'
+                ? 'border-[#00FFaa]/30 bg-[#00FFaa]/10'
+                : 'border-white/[0.06] bg-white/[0.04]'
             }`}
           >
             <span className="text-2xl">{mood.emoji}</span>
-            <span className="text-sm font-medium text-zinc-200">{mood.label}</span>
-            <span className="max-w-[140px] text-xs text-zinc-500">{mood.description}</span>
+            <span className="text-sm font-medium text-white/80">{mood.label}</span>
+            <span className="max-w-[140px] text-xs text-white/30">{mood.description}</span>
           </button>
         ))}
       </div>

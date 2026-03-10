@@ -16,11 +16,14 @@ export default async function CityPage({ params }: CityPageProps) {
     notFound();
   }
 
-  const vibeScore = await cityDataService.getVibeScore(cityId);
+  const [vibeScore, weather] = await Promise.all([
+    cityDataService.getVibeScore(cityId),
+    cityDataService.getWeather(cityId),
+  ]);
 
   return (
     <Container>
-      <CityViewClient city={city} vibeScore={vibeScore} />
+      <CityViewClient city={city} vibeScore={vibeScore} weather={weather} />
     </Container>
   );
 }

@@ -33,16 +33,16 @@ export function ErrorDisplay({ error, onRetry, className = '' }: ErrorDisplayPro
 
   return (
     <div
-      className={`flex flex-col items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 p-6 text-center ${className}`}
+      className={`flex flex-col items-center gap-3 rounded-2xl border border-white/[0.06] bg-[--card-bg] p-6 text-center ${className}`}
       role="alert"
     >
       <span className="text-3xl">{icon}</span>
-      <p className="text-sm text-zinc-300">{message}</p>
+      <p className="text-sm text-white/60">{message}</p>
       {onRetry && (
         <button
           type="button"
           onClick={onRetry}
-          className="mt-1 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-700"
+          className="mt-1 rounded-lg bg-white/5 px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/[0.08]"
         >
           Try again
         </button>

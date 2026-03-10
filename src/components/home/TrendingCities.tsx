@@ -10,16 +10,19 @@ interface TrendingCitiesProps {
 
 export function TrendingCities({ cities }: TrendingCitiesProps) {
   return (
-    <section className="flex flex-col gap-6">
-      <div className="flex items-center gap-2">
-        <h2 className="text-2xl font-semibold text-white">Trending Now</h2>
+    <section className="relative z-[1] flex flex-col gap-8">
+      <div className="flex items-center gap-3">
+        <h2 className="font-mono-label text-sm font-semibold text-white/30">
+          Trending Now
+        </h2>
         <motion.span
-          className="inline-block h-2 w-2 rounded-full bg-emerald-400"
+          className="inline-block h-2 w-2 rounded-full bg-[#00FFaa]"
+          style={{ boxShadow: '0 0 12px rgba(0,255,170,0.5)' }}
           animate={{ opacity: [1, 0.3, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
         />
       </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
         {cities.map(({ city, vibeScore }, i) => (
           <motion.div
             key={city.id}

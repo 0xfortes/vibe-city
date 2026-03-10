@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
 import type { AgentMessage, VerdictCard } from '@/types';
 import { DebateStream } from './DebateStream';
 import { VerdictCardDisplay } from './VerdictCardDisplay';
@@ -16,7 +15,11 @@ interface DebateReplayProps {
 }
 
 export function DebateReplay({ cityName, mood, messages, verdict, createdAt }: DebateReplayProps) {
-  const [debateExpanded, setDebateExpanded] = useState(false);
+  const [expandedAgent, setExpandedAgent] = useState<number | null>(null);
+
+  const handleToggleAgent = useCallback((index: number) => {
+    setExpandedAgent((prev) => (prev === index ? null : index));
+  }, []);
 
   return (
     <div className="flex flex-col gap-6">
@@ -48,38 +51,24 @@ export function DebateReplay({ cityName, mood, messages, verdict, createdAt }: D
       </div>
 
       {/* Verdict */}
-      {verdict && <VerdictCardDisplay verdict={verdict} />}
+      {verdict && (
+        <VerdictCardDisplay
+          verdict={verdict}
+          agentEmojis={messages.map((m) => m.agentEmoji)}
+        />
+      )}
 
-      {/* Collapsible debate */}
-      <div>
-        <button
-          type="button"
-          onClick={() => setDebateExpanded((prev) => !prev)}
-          className="flex items-center gap-2 text-sm font-medium text-zinc-400 transition-colors hover:text-zinc-200"
-        >
-          <motion.span
-            animate={{ rotate: debateExpanded ? 90 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            &#9654;
-          </motion.span>
-          {debateExpanded ? 'Hide the full debate' : 'Show the full debate'}
-        </button>
-
-        <AnimatePresence>
-          {debateExpanded && (
-            <motion.div
-              className="mt-4"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <DebateStream messages={messages} isStreaming={false} />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      {/* Debate — all revealed, all collapsed */}
+      {messages.length > 0 && (
+        <DebateStream
+          messages={messages}
+          isStreaming={false}
+          revealedCount={messages.length}
+          expandedAgent={expandedAgent}
+          onToggleAgent={handleToggleAgent}
+          onSkipToVerdict={() => {}}
+        />
+      )}
     </div>
   );
 }

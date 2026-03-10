@@ -5,65 +5,132 @@ import { AnimatePresence } from 'framer-motion';
 import type { AgentMessage } from '@/types';
 import { AGENTS } from '@/config/agents';
 import { AGENT_COLORS } from '@/config/agent-colors';
-import { AgentAvatar, LoadingSpinner } from '@/components/ui';
+import { AgentAvatar } from '@/components/ui';
 import { AgentMessageBubble } from './AgentMessageBubble';
 
 interface DebateStreamProps {
   messages: AgentMessage[];
   isStreaming: boolean;
+  revealedCount: number;
+  expandedAgent: number | null;
+  onToggleAgent: (index: number) => void;
+  onSkipToVerdict: () => void;
 }
 
-export function DebateStream({ messages, isStreaming }: DebateStreamProps) {
+/** Bouncing dots CSS animation for typing indicator */
+function BouncingDots({ color }: { color: string }) {
+  return (
+    <span className="inline-flex items-center gap-0.5">
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="inline-block h-1.5 w-1.5 rounded-full"
+          style={{
+            backgroundColor: color,
+            animation: 'bounce-dot 1.2s infinite',
+            animationDelay: `${i * 0.15}s`,
+          }}
+        />
+      ))}
+      <style>{`
+        @keyframes bounce-dot {
+          0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+          30% { transform: translateY(-4px); opacity: 1; }
+        }
+      `}</style>
+    </span>
+  );
+}
+
+export function DebateStream({
+  messages,
+  isStreaming,
+  revealedCount,
+  expandedAgent,
+  onToggleAgent,
+  onSkipToVerdict,
+}: DebateStreamProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages.length]);
+  }, [revealedCount]);
 
-  // Determine which agent speaks next for the thinking indicator
-  const nextAgentIndex = messages.length < AGENTS.length ? messages.length : 0;
-  const nextAgent = AGENTS[nextAgentIndex];
+  const visibleMessages = messages.slice(0, revealedCount);
+  const isRevealing = revealedCount < messages.length || isStreaming;
+
+  // Determine next agent for typing indicator
+  const nextMessageIndex = revealedCount;
+  const nextMessage = messages[nextMessageIndex];
+  const nextAgent = nextMessage
+    ? AGENTS.find((a) => a.id === nextMessage.agentId)
+    : isStreaming && messages.length === revealedCount
+      ? AGENTS[messages.length < AGENTS.length ? messages.length : 0]
+      : null;
   const nextColors = nextAgent ? AGENT_COLORS[nextAgent.id] : null;
 
-  return (
-    <div className="relative">
-      {/* Top fade gradient */}
-      <div className="pointer-events-none absolute top-0 right-0 left-0 z-10 h-4 bg-gradient-to-b from-zinc-950 to-transparent" />
+  const totalAgents = AGENTS.length;
+  const progressPercent = totalAgents > 0 ? (revealedCount / totalAgents) * 100 : 0;
 
+  return (
+    <div className="relative flex flex-col gap-3">
+      {/* Progress bar */}
+      {isRevealing && (
+        <div className="h-1 w-full overflow-hidden rounded-full bg-zinc-800">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-[#00FFaa] to-[#06b6d4] transition-all duration-700 ease-out"
+            style={{ width: `${Math.min(progressPercent, 100)}%` }}
+          />
+        </div>
+      )}
+
+      {/* Agent cards */}
       <div
         ref={scrollRef}
-        className="flex max-h-[60vh] flex-col gap-4 overflow-y-auto py-4"
+        className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto py-2"
       >
+        {/* Initial assembling state */}
+        {isStreaming && messages.length === 0 && (
+          <div className="flex items-center justify-center gap-3 py-8 text-zinc-500">
+            <span className="text-sm">The Council is assembling...</span>
+            <BouncingDots color="#71717a" />
+          </div>
+        )}
+
         <AnimatePresence mode="popLayout">
-          {messages.map((message, i) => (
+          {visibleMessages.map((message, i) => (
             <AgentMessageBubble
               key={`${message.agentId}-${i}`}
               message={message}
               index={i}
+              isExpanded={expandedAgent === i}
+              onToggle={() => onToggleAgent(i)}
             />
           ))}
         </AnimatePresence>
 
-        {isStreaming && messages.length > 0 && nextAgent && nextColors && (
-          <div className={`flex items-center gap-3 ${nextColors.text}`}>
+        {/* Typing indicator */}
+        {isRevealing && nextAgent && nextColors && visibleMessages.length > 0 && (
+          <div className={`flex items-center gap-3 px-3 py-2 ${nextColors.text}`}>
             <AgentAvatar agentId={nextAgent.id} showName={false} size="sm" />
-            <LoadingSpinner size="sm" />
-            <span className="text-sm">{nextAgent.name} is thinking...</span>
-          </div>
-        )}
-
-        {isStreaming && messages.length === 0 && (
-          <div className="flex items-center justify-center gap-3 py-8 text-zinc-500">
-            <LoadingSpinner size="md" />
-            <span className="text-sm">The Council is assembling...</span>
+            <span className="text-sm">{nextAgent.name} is thinking</span>
+            <BouncingDots color={nextColors.accent} />
           </div>
         )}
       </div>
 
-      {/* Bottom fade gradient */}
-      <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-10 h-4 bg-gradient-to-t from-zinc-950 to-transparent" />
+      {/* Skip to verdict button */}
+      {isRevealing && visibleMessages.length > 0 && (
+        <button
+          type="button"
+          onClick={onSkipToVerdict}
+          className="self-center text-sm text-white/30 transition-colors hover:text-white/60"
+        >
+          Skip to verdict &rarr;
+        </button>
+      )}
     </div>
   );
 }

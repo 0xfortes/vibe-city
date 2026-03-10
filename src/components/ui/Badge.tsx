@@ -28,7 +28,7 @@ export function Badge({
   const colorClass =
     variant === 'domain' && domain
       ? DOMAIN_COLORS[domain]
-      : 'bg-zinc-800 text-zinc-300 border-zinc-700';
+      : 'bg-white/[0.06] text-white/50 border-white/[0.08]';
 
   return (
     <span

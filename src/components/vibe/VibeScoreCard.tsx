@@ -5,6 +5,7 @@ import type { VibeScore } from '@/types';
 import { AGENTS } from '@/config/agents';
 import { AGENT_COLORS } from '@/config/agent-colors';
 import { Card, ScoreBar } from '@/components/ui';
+import { VibeScoreRing } from './VibeScoreRing';
 
 interface VibeScoreCardProps {
   vibeScore: VibeScore;
@@ -24,13 +25,12 @@ export function VibeScoreCard({ vibeScore, cityName }: VibeScoreCardProps) {
     <Card header={`${cityName} Vibe Score`}>
       <div className="flex flex-col gap-4">
         <motion.div
-          className="text-center"
+          className="flex justify-center"
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
-          <span className="text-5xl font-bold text-white">{vibeScore.overall}</span>
-          <p className="mt-1 text-sm text-zinc-400">Overall Vibe</p>
+          <VibeScoreRing score={vibeScore.overall} size="lg" />
         </motion.div>
 
         <div className="flex flex-col gap-3">

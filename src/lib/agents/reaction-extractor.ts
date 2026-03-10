@@ -1,6 +1,13 @@
 import type { AgentMessage, AgentReaction, AgentId } from '@/types';
 import { getAnthropicClient } from './claude-client';
 
+/** Strip markdown code fences (```json ... ```) that models sometimes add despite instructions. */
+export function stripCodeFences(text: string): string {
+  // Greedy match everything between opening and closing fences
+  const match = text.match(/```(?:json)?\s*([\s\S]+?)\s*```/);
+  return match ? match[1].trim() : text.trim();
+}
+
 const MODEL = 'claude-haiku-4-5-20251001';
 
 interface RawReactions {
@@ -48,7 +55,7 @@ Rules:
     });
 
     const text = response.content[0].type === 'text' ? response.content[0].text : '';
-    const raw = JSON.parse(text) as RawReactions;
+    const raw = JSON.parse(stripCodeFences(text)) as RawReactions;
 
     const validTypes = new Set(['fire', 'nah', 'hmm', 'cosign']);
     const validAgentIds = new Set(messages.map((m) => m.agentId));

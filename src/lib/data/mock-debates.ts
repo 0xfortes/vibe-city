@@ -73,9 +73,10 @@ export const MOCK_DEBATES: Record<string, MockDebate> = {
       },
     ],
     verdict: {
-      topPick: 'Golden Gai bar crawl → Fuunji tsukemen → Nonbei Yokocho nightcap',
-      wildcard: 'Start in Yanaka at sunset and let Tokyo guide you south into the night',
-      theDebate: 'The Council split between planned nightlife and letting the city decide. The Nightowl and Local battled over which tiny bar alley wins, while the Wanderer made a strong case for throwing the map away entirely.',
+      route: 'Golden Gai → Fuunji tsukemen → Nonbei Yokocho nightcap',
+      description: 'Start with a Golden Gai bar crawl through the tiny alleys, refuel with Fuunji\'s legendary tsukemen, then wind down at Nonbei Yokocho for a nightcap.',
+      consensus: '4 of 5 agreed on the route; debate centered on whether to plan the night or let Tokyo guide you.',
+      wildcard: 'Start in Yanaka at sunset and let Tokyo guide you south into the night.',
     },
     followUpPrompts: [
       'What if I only have 3 hours tonight?',
@@ -149,9 +150,10 @@ export const MOCK_DEBATES: Record<string, MockDebate> = {
       },
     ],
     verdict: {
-      topPick: 'Klunkerkranich sunset → Street Food Thursday → Tresor marathon',
-      wildcard: 'Tempelhofer Feld afternoon → Neukölln Art Walk → wherever Weserstraße takes you',
-      theDebate: 'Berlin split the Council hard. The Nightowl and Local debated club credibility while the Wanderer made the strongest case for daytime Berlin. Everyone agreed on Markthalle Neun, which might be a first.',
+      route: 'Klunkerkranich sunset → Street Food Thursday → Tresor',
+      description: 'Catch sunset drinks at Klunkerkranich rooftop, graze through Street Food Thursday at Markthalle Neun, then head to Tresor for a proper Berlin night.',
+      consensus: '3 of 5 agreed on the club route; the Wanderer pushed hard for daytime Berlin instead.',
+      wildcard: 'Tempelhofer Feld afternoon → Neukölln Art Walk → wherever Weserstraße takes you.',
     },
     followUpPrompts: [
       'What if I can\'t get into Berghain?',
@@ -225,9 +227,10 @@ export const MOCK_DEBATES: Record<string, MockDebate> = {
       },
     ],
     verdict: {
-      topPick: 'Russ & Daughters brunch → Red Hook First Saturdays → House of Yes after dark',
-      wildcard: 'High Line sunset → walk to LES → DUMBO waterfront under the bridge lights',
-      theDebate: 'NYC brought out strong opinions. The Foodie dominated with three solid picks, the Local Legend championed Red Hook hard, and the Wanderer reminded everyone that the best NYC nights start with no plan and end somewhere unexpected.',
+      route: 'Russ & Daughters → Red Hook First Saturdays → House of Yes',
+      description: 'Brunch at Russ & Daughters, catch Red Hook First Saturdays for art and waterfront vibes, then close out at House of Yes for a proper NYC night.',
+      consensus: '4 of 5 agreed on the food-first approach; debate was whether to stay in Brooklyn or cross into Manhattan.',
+      wildcard: 'High Line sunset → walk to LES → DUMBO waterfront under the bridge lights.',
     },
     followUpPrompts: [
       'Best plan if I\'m only in Brooklyn?',

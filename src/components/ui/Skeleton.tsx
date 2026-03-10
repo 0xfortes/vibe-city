@@ -17,7 +17,7 @@ const VARIANT_CLASSES: Record<SkeletonVariant, string> = {
 export function Skeleton({ variant = 'text', className = '' }: SkeletonProps) {
   return (
     <div
-      className={`animate-pulse bg-zinc-800 ${VARIANT_CLASSES[variant]} ${className}`}
+      className={`animate-pulse bg-white/[0.05] ${VARIANT_CLASSES[variant]} ${className}`}
       role="status"
       aria-label="Loading"
     />

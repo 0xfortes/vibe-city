@@ -4,7 +4,7 @@ import { MOOD_MAP } from '@/config/moods';
 import { cityDataService } from '@/lib/data';
 import { getAnthropicClient } from './claude-client';
 import { buildSystemPrompt, buildUserMessage } from './prompt-builder';
-import { extractReactions } from './reaction-extractor';
+import { extractReactions, stripCodeFences } from './reaction-extractor';
 import { wrapUserInput } from '@/lib/security';
 
 // Model to use for agent calls — Haiku for speed/cost, Sonnet for quality
@@ -122,10 +122,10 @@ RULES:
 - NEVER include dialogue snippets or asterisked actions
 - Write as a confident city guide giving direct recommendations
 - Use specific venue/place names, times, and practical details
-- Keep each field concise — 1-2 sentences max
+- The route field must be a short itinerary using → arrows, max 10 words. Use real place names.
 
 Output EXACTLY this JSON format, no markdown, no code fences:
-{"topPick":"<Direct 1-2 sentence plan: what to do, where, when>","wildcard":"<A surprising alternative nobody expected — specific place + why>","theDebate":"<1-2 sentences on what the key tradeoffs were, without naming agents>","hiddenGem":"<Optional: a lesser-known spot that came up, or null>"}`,
+{"route":"<Short arrow-separated route title, max 10 words, e.g. Markthalle Neun → Klunkerkranich → Let the night decide>","description":"<2-3 sentence summary explaining the recommended plan and why>","consensus":"<One line: how many agents agreed and what they disagreed on>","wildcard":"<Alternative recommendation if conditions change, 1-2 sentences>"}`,
     messages: [
       {
         role: 'user',
@@ -137,13 +137,15 @@ Output EXACTLY this JSON format, no markdown, no code fences:
   const text = response.content[0].type === 'text' ? response.content[0].text : '';
 
   try {
-    return JSON.parse(text) as VerdictCard;
+    return JSON.parse(stripCodeFences(text)) as VerdictCard;
   } catch {
     // Fallback if JSON parsing fails
+    const firstWords = text.split(/\s+/).slice(0, 10).join(' ');
     return {
-      topPick: messages[0]?.content.slice(0, 100) ?? 'Check out the city tonight',
-      wildcard: messages[messages.length - 1]?.content.slice(0, 100) ?? 'Just wander and explore',
-      theDebate: 'The Council had strong opinions. Check the full debate for details.',
+      route: firstWords || 'Explore the city tonight',
+      description: messages[0]?.content.slice(0, 200) ?? 'The Council recommends heading out and seeing where the night takes you.',
+      consensus: 'The Council had mixed opinions.',
+      wildcard: messages[messages.length - 1]?.content.slice(0, 100) ?? 'Just wander and explore.',
     };
   }
 }
@@ -175,7 +177,7 @@ async function generateFollowUps(
   const text = response.content[0].type === 'text' ? response.content[0].text : '';
 
   try {
-    return JSON.parse(text) as string[];
+    return JSON.parse(stripCodeFences(text)) as string[];
   } catch {
     return [
       `What if I only have 2 hours in ${city.name}?`,

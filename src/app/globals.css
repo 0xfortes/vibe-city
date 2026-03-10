@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #08080c;
+  --foreground: rgba(255, 255, 255, 0.85);
+
+  /* Accent colors */
+  --accent-green: #00FFaa;
+  --accent-cyan: #06b6d4;
+  --accent-purple: #a78bfa;
+
+  /* Card surfaces */
+  --card-bg: rgba(14, 14, 20, 1);
+  --card-bg-glass: rgba(12, 12, 18, 0.9);
 
   /* Agent accent colors */
   --agent-nightowl: #a855f7;
@@ -15,8 +24,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-outfit);
+  --font-mono: var(--font-jbmono);
 }
 
 body {
@@ -32,9 +41,102 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #3f3f46;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #52525b;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ─── Keyframes ─── */
+@keyframes orbFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-40px, 30px) scale(1.1); }
+}
+@keyframes orbFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, -40px) scale(1.15); }
+}
+@keyframes orbFloat3 {
+  0%, 100% { transform: translate(0, 0) scale(0.9); }
+  50% { transform: translate(-30px, 50px) scale(1.05); }
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes glowPulse {
+  0%, 100% { text-shadow: 0 0 40px rgba(0, 255, 170, 0.15), 0 0 80px rgba(0, 255, 170, 0.05); }
+  50% { text-shadow: 0 0 60px rgba(0, 255, 170, 0.25), 0 0 120px rgba(0, 255, 170, 0.1); }
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ─── Utility classes ─── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-surface {
+  background: rgba(8, 8, 12, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+.font-mono-label {
+  font-family: var(--font-jbmono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Nav link hover underline effect */
+.nav-link-accent {
+  position: relative;
+}
+.nav-link-accent::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent-green);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+.nav-link-accent:hover::after {
+  transform: scaleX(1);
+}
+
+/* Shimmer animation for CTA buttons */
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .orb-animate {
+    animation: none !important;
+  }
 }

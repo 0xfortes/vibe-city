@@ -10,12 +10,12 @@ export async function NavHeader() {
   } = await supabase.auth.getUser();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-sm">
+    <header className="glass-surface sticky top-0 z-50 border-b border-white/[0.04]">
       <Container>
         <div className="flex h-14 items-center justify-between">
-          <Link href="/" className="text-lg font-bold tracking-tight">
-            <span className="text-white">Vibe</span>
-            <span className="text-zinc-400">CITY</span>
+          <Link href="/" className="flex items-center gap-0.5 text-lg tracking-tight">
+            <span className="font-light text-white/70">Vibe</span>
+            <span className="gradient-text font-bold">CITY</span>
           </Link>
           <NavAuthButtons user={user} />
         </div>

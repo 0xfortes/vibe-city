@@ -12,7 +12,7 @@ interface DashboardClientProps {
     city_id: string;
     cityName: string;
     mood: string | null;
-    verdict: { topPick: string } | null;
+    verdict: { route: string } | null;
     created_at: string;
   }[];
   isSubscribed: boolean;

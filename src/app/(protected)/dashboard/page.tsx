@@ -62,21 +62,24 @@ export default async function DashboardPage() {
     ...debate,
     cityName: CITY_MAP[debate.city_id]?.name ?? debate.city_id,
     // Narrow verdict to the shape the client component expects
-    verdict: debate.verdict ? { topPick: debate.verdict.topPick } : null,
+    verdict: debate.verdict
+      ? { route: debate.verdict.route ?? (debate.verdict as unknown as Record<string, unknown>).topPick as string ?? '' }
+      : null,
   }));
 
   // City list for QuickStart
   const cities = LAUNCH_CITIES.map((c) => ({ id: c.id, name: c.name, country: c.country }));
 
   return (
-    <Container className="py-8">
+    <Container className="relative z-[1] py-8">
       <div className="flex flex-col gap-8">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold text-white">
-            {getGreeting()}, {displayName}
+            {getGreeting()},{' '}
+            <span className="gradient-text">{displayName}</span>
           </h1>
-          <p className="mt-1 text-zinc-400">
+          <p className="mt-1 text-white/40">
             {isSubscribed
               ? 'VibeCITY Pro — unlimited debates'
               : freeDebatesUsed === 0
