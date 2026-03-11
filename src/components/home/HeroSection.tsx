@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AGENTS } from '@/config/agents';
 import { getTimeOfDayLabel } from '@/lib/time-of-day';
@@ -24,6 +25,25 @@ const AGENT_PILL_COLORS: Record<string, string> = {
   local: '#ef4444',
   wanderer: '#06b6d4',
 };
+
+function AgentPill({ color, emoji, name }: { color: string; emoji: string; name: string }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-all hover:-translate-y-0.5"
+      style={{
+        background: hovered ? `${color}10` : 'rgba(255,255,255,0.06)',
+        border: `1px solid ${hovered ? `${color}25` : 'rgba(255,255,255,0.10)'}`,
+        color: hovered ? color : 'rgba(255,255,255,0.5)',
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <span className="text-base">{emoji}</span>
+      {name.replace('The ', '')}
+    </span>
+  );
+}
 
 export function HeroSection() {
   return (
@@ -61,18 +81,7 @@ export function HeroSection() {
         {AGENTS.map((agent) => {
           const color = AGENT_PILL_COLORS[agent.id] ?? '#ffffff';
           return (
-            <span
-              key={agent.id}
-              className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-all hover:-translate-y-0.5"
-              style={{
-                background: `${color}10`,
-                border: `1px solid ${color}25`,
-                color: color,
-              }}
-            >
-              <span className="text-base">{agent.emoji}</span>
-              {agent.name.replace('The ', '')}
-            </span>
+            <AgentPill key={agent.id} color={color} emoji={agent.emoji} name={agent.name} />
           );
         })}
       </motion.div>

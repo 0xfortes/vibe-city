@@ -235,19 +235,7 @@ export function CityViewClient({ city, vibeScore, weather }: CityViewClientProps
         <ErrorDisplay error={error} onRetry={() => startDebate(city.id, selectedMood ?? undefined)} />
       )}
 
-      {/* Debate stream with progressive reveal */}
-      {!error && (isStreaming || messages.length > 0) && (
-        <DebateStream
-          messages={messages}
-          isStreaming={isStreaming}
-          revealedCount={revealedCount}
-          expandedAgent={expandedAgent}
-          onToggleAgent={handleToggleAgent}
-          onSkipToVerdict={handleSkipToVerdict}
-        />
-      )}
-
-      {/* Verdict — only after all revealed */}
+      {/* Verdict — shown above the debate once complete */}
       <AnimatePresence>
         {isComplete && showVerdict && (
           <motion.div
@@ -264,6 +252,18 @@ export function CityViewClient({ city, vibeScore, weather }: CityViewClientProps
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Debate stream with progressive reveal */}
+      {!error && (isStreaming || messages.length > 0) && (
+        <DebateStream
+          messages={messages}
+          isStreaming={isStreaming}
+          revealedCount={revealedCount}
+          expandedAgent={expandedAgent}
+          onToggleAgent={handleToggleAgent}
+          onSkipToVerdict={handleSkipToVerdict}
+        />
+      )}
 
       {/* Follow-up prompts */}
       {showFollowUps && (

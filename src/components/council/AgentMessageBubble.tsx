@@ -90,7 +90,17 @@ export function AgentMessageBubble({ message, index, isExpanded, onToggle }: Age
 
   return (
     <motion.div
-      className={`cursor-pointer rounded-lg border-l-2 ${colors.border} ${colors.bg} transition-colors hover:brightness-110`}
+      className="cursor-pointer rounded-lg transition-colors"
+      style={{
+        background: 'rgba(14,14,20,1)',
+        borderLeft: `3px solid ${colors.accent}`,
+        border: `1px solid ${colors.accent}26`,
+        borderLeftWidth: '3px',
+        borderLeftColor: colors.accent,
+      }}
+      whileHover={{
+        borderColor: `${colors.accent}4D`,
+      }}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
@@ -105,7 +115,7 @@ export function AgentMessageBubble({ message, index, isExpanded, onToggle }: Age
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <span className={`text-sm font-medium ${colors.text}`}>{message.agentName}</span>
           {!isExpanded && (
-            <span className="truncate text-sm text-white/40">{summary}</span>
+            <span className="truncate text-sm" style={{ color: 'rgba(255,255,255,0.45)' }}>{summary}</span>
           )}
         </div>
         <motion.span

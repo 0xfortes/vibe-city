@@ -81,12 +81,6 @@ export function VerdictCardDisplay({ verdict, agentEmojis = [], onNewDebate }: V
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <button
               type="button"
-              className="rounded-xl bg-gradient-to-r from-[#00FFaa] to-[#06b6d4] px-5 py-2.5 text-sm font-semibold text-zinc-950 transition-opacity hover:opacity-90"
-            >
-              Save this plan
-            </button>
-            <button
-              type="button"
               className="rounded-xl border border-white/10 px-5 py-2.5 text-sm font-medium text-white/50 transition-colors hover:border-white/20 hover:text-white/70"
             >
               Share
