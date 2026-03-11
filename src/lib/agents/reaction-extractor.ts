@@ -3,9 +3,13 @@ import { getAnthropicClient } from './claude-client';
 
 /** Strip markdown code fences (```json ... ```) that models sometimes add despite instructions. */
 export function stripCodeFences(text: string): string {
-  // Greedy match everything between opening and closing fences
-  const match = text.match(/```(?:json)?\s*([\s\S]+?)\s*```/);
-  return match ? match[1].trim() : text.trim();
+  // Try matching with closing fence first
+  const closed = text.match(/```(?:json)?\s*([\s\S]+?)\s*```/);
+  if (closed) return closed[1].trim();
+  // Handle truncated output where closing fence is missing
+  const open = text.match(/```(?:json)?\s*([\s\S]+)/);
+  if (open) return open[1].trim();
+  return text.trim();
 }
 
 const MODEL = 'claude-haiku-4-5-20251001';
@@ -36,7 +40,7 @@ export async function extractReactions(messages: AgentMessage[]): Promise<AgentM
   try {
     const response = await client.messages.create({
       model: MODEL,
-      max_tokens: 300,
+      max_tokens: 512,
       system: `You analyze debates between city guide agents and extract their implicit reactions to each other.
 
 Output EXACTLY a JSON object mapping each agentId to an array of reactions. Each reaction has "type" (one of: "fire", "cosign", "hmm", "nah") and "targetAgentId".
