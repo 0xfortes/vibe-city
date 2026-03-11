@@ -85,13 +85,13 @@ export function CityViewClient({ city, vibeScore, weather }: CityViewClientProps
   );
 
   const handleSurpriseMe = useCallback(() => {
-    setSelectedMood(null);
+    setSelectedMood('surprise');
     setHasStarted(true);
     setRevealedCount(0);
     setExpandedAgent(null);
     setSkippedToVerdict(false);
     reset();
-    setDebateRequest({});
+    setDebateRequest({ mood: 'surprise' });
   }, [reset]);
 
   const handleFollowUp = useCallback(() => {
