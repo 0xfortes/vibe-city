@@ -20,8 +20,8 @@ const fadeUp = {
 const AGENT_PILL_COLORS: Record<string, string> = {
   nightowl: '#a78bfa',
   foodie: '#f97316',
-  'culture-vulture': '#ec4899',
-  'local-legend': '#ef4444',
+  culture: '#ec4899',
+  local: '#ef4444',
   wanderer: '#06b6d4',
 };
 

@@ -14,11 +14,11 @@
   --card-bg-glass: rgba(12, 12, 18, 0.9);
 
   /* Agent accent colors */
-  --agent-nightowl: #a855f7;
+  --agent-nightowl: #a78bfa;
   --agent-foodie: #f97316;
-  --agent-culture: #3b82f6;
-  --agent-local: #f59e0b;
-  --agent-wanderer: #10b981;
+  --agent-culture: #ec4899;
+  --agent-local: #ef4444;
+  --agent-wanderer: #06b6d4;
 }
 
 @theme inline {
