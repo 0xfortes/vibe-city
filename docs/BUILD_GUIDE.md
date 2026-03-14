@@ -206,14 +206,14 @@ Comprehensive testing, security audit, performance optimization.
 ## Phase 5: Staging & Pre-Launch
 
 ### Steps
-1. ⬜ Deploy to Vercel (preview environment)
-2. ⬜ Set staging environment variables in Vercel
-3. ⬜ Test full flow on staging URL
-4. ⬜ Invite 3-5 testers
-5. ⬜ Fix issues found in staging
+1. ✅ Deploy to Vercel (preview environment)
+2. ✅ Set staging environment variables in Vercel
+3. ✅ Test full flow on staging URL
+4. ✅ Invite 3-5 testers
+5. ✅ Fix issues found in staging
 6. ⬜ Prepare production Stripe products (live mode)
 7. ⬜ Build Vibe Card share image generation (OG images)
-8. ⬜ Add mock data for remaining 7 launch cities
+8. ✅ Add mock data for remaining 7 launch cities
 
 ## Phase 6: Production Launch
 

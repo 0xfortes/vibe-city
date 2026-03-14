@@ -1,6 +1,6 @@
 # CLAUDE.md — Claude Code Project Instructions
 
-## Current Phase: Pre-Phase 5 polish complete, ready for Phase 5: Staging (Vercel preview, staging credentials)
+## Current Phase: Phase 5 in progress — steps 6 (production Stripe products) and 7 (OG image generation) remaining
 
 ### Phase Rules 
 
