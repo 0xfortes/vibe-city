@@ -32,8 +32,6 @@ export function CityViewClient({ city, vibeScore, weather }: CityViewClientProps
   // Progressive reveal state
   const [revealedCount, setRevealedCount] = useState(0);
   const [expandedAgent, setExpandedAgent] = useState<number | null>(null);
-  const [skippedToVerdict, setSkippedToVerdict] = useState(false);
-
   const {
     messages,
     verdict,
@@ -57,7 +55,6 @@ export function CityViewClient({ city, vibeScore, weather }: CityViewClientProps
 
   // Progressive reveal timer — reveal one agent at a time
   useEffect(() => {
-    if (skippedToVerdict) return;
     if (revealedCount >= messages.length) return;
 
     const timer = setTimeout(() => {
@@ -69,7 +66,7 @@ export function CityViewClient({ city, vibeScore, weather }: CityViewClientProps
     }, REVEAL_DELAY_MS);
 
     return () => clearTimeout(timer);
-  }, [revealedCount, messages.length, skippedToVerdict]);
+  }, [revealedCount, messages.length]);
 
   const handleMoodSelect = useCallback(
     (mood: MoodType) => {
@@ -77,7 +74,6 @@ export function CityViewClient({ city, vibeScore, weather }: CityViewClientProps
       setHasStarted(true);
       setRevealedCount(0);
       setExpandedAgent(null);
-      setSkippedToVerdict(false);
       reset();
       setDebateRequest({ mood });
     },
@@ -89,7 +85,6 @@ export function CityViewClient({ city, vibeScore, weather }: CityViewClientProps
     setHasStarted(true);
     setRevealedCount(0);
     setExpandedAgent(null);
-    setSkippedToVerdict(false);
     reset();
     setDebateRequest({ mood: 'surprise' });
   }, [reset]);
@@ -97,22 +92,14 @@ export function CityViewClient({ city, vibeScore, weather }: CityViewClientProps
   const handleFollowUp = useCallback(() => {
     setRevealedCount(0);
     setExpandedAgent(null);
-    setSkippedToVerdict(false);
     reset();
     setDebateRequest({ mood: selectedMood ?? undefined });
   }, [selectedMood, reset]);
-
-  const handleSkipToVerdict = useCallback(() => {
-    setRevealedCount(messages.length);
-    setExpandedAgent(null);
-    setSkippedToVerdict(true);
-  }, [messages.length]);
 
   const handleNewDebate = useCallback(() => {
     setHasStarted(false);
     setRevealedCount(0);
     setExpandedAgent(null);
-    setSkippedToVerdict(false);
     reset();
   }, [reset]);
 
@@ -167,8 +154,8 @@ export function CityViewClient({ city, vibeScore, weather }: CityViewClientProps
   }
 
   const allRevealed = revealedCount >= messages.length && messages.length > 0;
-  const showVerdict = verdict && (allRevealed || skippedToVerdict);
-  const showFollowUps = isComplete && followUpPrompts.length > 0 && (allRevealed || skippedToVerdict);
+  const showVerdict = verdict && allRevealed;
+  const showFollowUps = isComplete && followUpPrompts.length > 0 && allRevealed;
 
   // During & post-debate
   return (
@@ -261,7 +248,6 @@ export function CityViewClient({ city, vibeScore, weather }: CityViewClientProps
           revealedCount={revealedCount}
           expandedAgent={expandedAgent}
           onToggleAgent={handleToggleAgent}
-          onSkipToVerdict={handleSkipToVerdict}
         />
       )}
 

@@ -14,7 +14,6 @@ interface DebateStreamProps {
   revealedCount: number;
   expandedAgent: number | null;
   onToggleAgent: (index: number) => void;
-  onSkipToVerdict: () => void;
 }
 
 /** Bouncing dots CSS animation for typing indicator */
@@ -48,7 +47,6 @@ export function DebateStream({
   revealedCount,
   expandedAgent,
   onToggleAgent,
-  onSkipToVerdict,
 }: DebateStreamProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -121,16 +119,6 @@ export function DebateStream({
         )}
       </div>
 
-      {/* Skip to verdict button */}
-      {isRevealing && visibleMessages.length > 0 && (
-        <button
-          type="button"
-          onClick={onSkipToVerdict}
-          className="self-center text-sm text-white/30 transition-colors hover:text-white/60"
-        >
-          Skip to verdict &rarr;
-        </button>
-      )}
     </div>
   );
 }

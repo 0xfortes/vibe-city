@@ -66,7 +66,6 @@ export function DebateReplay({ cityName, mood, messages, verdict, createdAt }: D
           revealedCount={messages.length}
           expandedAgent={expandedAgent}
           onToggleAgent={handleToggleAgent}
-          onSkipToVerdict={() => {}}
         />
       )}
     </div>
